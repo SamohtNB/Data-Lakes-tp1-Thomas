@@ -11,20 +11,28 @@ def unpack_data(input_dir, output_file):
     """
 
     # Step 1: Initialize an empty list to store DataFrames
-
+    list_data = []
+    
     # Step 2: Loop over files in the input directory
-
+    for file in os.listdir(input_dir):
+        print(file)
+        
         # Step 3: Check if the file is a CSV or matches a naming pattern
-
-        # Step 4: Read the CSV file using pandas
-
-        # Step 5: Append the DataFrame to the list
-
+        if file.endswith(".csv") or file.startswith("data-"):
+            
+            # Step 4: Read the CSV file using pandas
+            file_path = os.path.join(input_dir, file)
+            data_temp = pd.read_csv(file_path, index_col=0)
+            
+            
+            # Step 5: Append the DataFrame to the list
+            list_data.append(data_temp)
+            
     # Step 6: Concatenate all DataFrames
-
+    data = pd.concat(list_data, axis=0, join="outer")
+    
     # Step 7: Save the combined DataFrame to output_file
-
-    pass
+    data.to_csv(output_file)
 
 
 if __name__ == "__main__":
