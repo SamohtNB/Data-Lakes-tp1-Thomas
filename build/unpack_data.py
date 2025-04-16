@@ -15,7 +15,6 @@ def unpack_data(input_dir, output_file):
     
     # Step 2: Loop over files in the input directory
     for file in os.listdir(input_dir):
-        print(file)
         
         # Step 3: Check if the file is a CSV or matches a naming pattern
         if file.endswith(".csv") or file.startswith("data-"):
