@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import boto3
 
 def unpack_data(input_dir, output_file):
     """
@@ -13,24 +14,33 @@ def unpack_data(input_dir, output_file):
     # Step 1: Initialize an empty list to store DataFrames
     list_data = []
     
-    # Step 2: Loop over files in the input directory
-    for file in os.listdir(input_dir):
-        
-        # Step 3: Check if the file is a CSV or matches a naming pattern
-        if file.endswith(".csv") or file.startswith("data-"):
-            
-            # Step 4: Read the CSV file using pandas
-            file_path = os.path.join(input_dir, file)
-            data_temp = pd.read_csv(file_path, index_col=0)
-            
-            
-            # Step 5: Append the DataFrame to the list
-            list_data.append(data_temp)
-            
+    s3 = boto3.client('s3', endpoint_url='https://localhost:4566', region_name='us-east-1')
+    for root, dirs, files in os.walk(input_dir):
+        print(f"Processing directory: {root}")
+        for file in files:
+            print(f"Processing file: {file} | file path: {os.path.join(root, file)}")
+            if file.endswith(".csv") or file.startswith("data-"):
+                
+                # Step 4: Read the CSV file using pandas
+                file_path = os.path.join(root, file)
+                data_temp = pd.read_csv(file_path, index_col=0)
+                
+                
+                # Step 5: Append the DataFrame to the list
+                list_data.append(data_temp)
+        print("nexte directory\n")
     # Step 6: Concatenate all DataFrames
-    data = pd.concat(list_data, axis=0, join="outer")
+    if list_data:
+        # Check if the list is not empty before concatenating
+        print("Concatenating DataFrames...")
+        data = pd.concat(list_data, axis=0, join="outer")
+    else:
+        # If the list is empty, create an empty DataFrame
+        print("No CSV files found in the directory.")
+        return
     
     # Step 7: Save the combined DataFrame to output_file
+
     data.to_csv(output_file)
 
 

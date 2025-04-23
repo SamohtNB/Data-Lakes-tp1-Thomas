@@ -74,6 +74,8 @@ def preprocess_data(data_file, output_dir):
     print("Distributing data")
     for cls in tqdm.tqdm(unique_classes):
         class_data_indices = np.where(family_accession == cls)[0]
+        print(f"class data indices: {class_data_indices}")
+        print(f"Class {cls} has {len(class_data_indices)} samples")
         count = len(class_data_indices)
 
         if count == 1:
