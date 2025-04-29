@@ -1,0 +1,9 @@
+schema: '2.0'
+stages:
+  start_localstack:
+    cmd: docker-compose up -d
+    deps:
+    - path: docker-compose.yml
+      hash: md5
+      md5: a4aecc842f65e8fd05bc0e1e86d3477b
+      size: 285

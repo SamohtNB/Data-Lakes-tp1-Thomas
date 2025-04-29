@@ -1,3 +1,4 @@
 .gitgnore
 /data
-
+/test
+/tmp
